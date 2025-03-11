@@ -1,12 +1,20 @@
 import { View, Text, Pressable, StyleSheet } from "react-native";
+import { Task } from "../App";
 import { useState } from "react";
 
-export default function TaskCard({task}:any){
-    const [isCompleted, setIsCompleted] = useState(task.completed)
+export default function TaskCard({ task }: any) {
+    const [isCompleted, setIsCompleted] = useState(task.completed);
+
     return (
         <View>
             <Pressable
-                style={styles.container}
+                style={
+                    task.priority == 0 || task.priority == undefined
+                        ? styles.container
+                        : task.priority == 1
+                        ? styles.container1
+                        : styles.container2
+                }
                 onPress={() => {
                     setIsCompleted(!isCompleted);
                 }}
