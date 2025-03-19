@@ -1,7 +1,7 @@
 {
-  "name": "todo",
+  "name": "react-native-intro",
   "version": "1.0.0",
-  "main": "index.ts",
+  "main": "expo-router/entry",
   "scripts": {
     "start": "expo start",
     "android": "expo start --android",
@@ -9,13 +9,20 @@
     "web": "expo start --web"
   },
   "dependencies": {
-    "@react-native-picker/picker": "^2.11.0",
+    "@react-native-community/datetimepicker": "^8.3.0",
+    "@react-native-picker/picker": "2.9.0",
+    "@react-navigation/native-stack": "^7.2.1",
+    "@react-navigation/stack": "^7.1.2",
     "axios": "^1.8.2",
+    "drizzle-orm": "^0.40.1",
     "expo": "~52.0.37",
+    "expo-router": "~4.0.18",
+    "expo-sqlite": "~15.1.2",
     "expo-status-bar": "~2.0.1",
     "react": "18.3.1",
     "react-hook-form": "^7.54.2",
-    "react-native": "0.76.7"
+    "react-native": "0.76.7",
+    "react-native-gesture-handler": "~2.20.2"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
