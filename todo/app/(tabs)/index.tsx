@@ -6,30 +6,36 @@ import axios from "axios";
 import TaskCard from "../../components/TaskCard";
 import CreateTask from "../../components/CreateTask";
 
+import { useSQLiteContext } from "expo-sqlite";
+import { addTask, getTasks, init } from "../../store/sqlite";
 
-export type Task = {
-    todo: string;
-    completed: boolean;
-    priority: Number;
-};
 
 export default function App() {
+    const db = useSQLiteContext()
     const [tasks, setTasks] = useState<Task[]>([]);
 
-    useEffect(() => {
-        axios
-            .get("https://dummyjson.com/todos")
-            .then((response) => {
-                setTasks((prevTasks) => [...prevTasks, ...response.data.todos]); // Оновлюємо стан
-            })
-            .catch((error) => {
-                console.error("Error fetching tasks:", error);
-            });
-    }, []);
-
+    // useEffect(() => {
+    //     axios
+    //         .get("https://dummyjson.com/todos")
+    //         .then((response) => {
+    //             setTasks((prevTasks) => [...prevTasks, ...response.data.todos]); // Оновлюємо стан
+    //         })
+    //         .catch((error) => {
+    //             console.error("Error fetching tasks:", error);
+    //         });
+    // }, []);
+    async function setup(){
+        await init()
+        setTasks(await getTasks())
+    }
+    
+    useEffect(()=>{
+        setup()
+    },[])
     const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
-    const addTask = (task: Task) => {
+    const addTaskHandler =async (task: Task) => {
         setTasks([...tasks, task]);
+        await addTask(task)
     };
 
     return (
@@ -48,7 +54,11 @@ export default function App() {
                 <Text style={styles.btnTitle}>+</Text>
             </Pressable>
 
-            <CreateTask isVisible={isModalVisible} onClose={() => setIsModalVisible(false)} onAddTask={addTask} />
+            <CreateTask
+                 isVisible={isModalVisible}
+                 onClose={() => setIsModalVisible(false)}
+                 onAddTask={addTaskHandler}
+             />
         </SafeAreaView>
     );
 }
