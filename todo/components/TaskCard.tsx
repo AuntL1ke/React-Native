@@ -1,9 +1,23 @@
 import { View, Text, Pressable, StyleSheet } from "react-native";
-import { Task } from "../App";
 import { useState } from "react";
+import { updateTask } from "../db/tasksService";
+import { useDispatch } from "react-redux";
+import { minus, plus } from "../app/slices/menuSlice";
 
 export default function TaskCard({ task }: any) {
     const [isCompleted, setIsCompleted] = useState(task.completed);
+    const dispatch = useDispatch();
+
+    const completeHandle = () => {
+        setIsCompleted(!isCompleted);
+        updateTask(task.id, !isCompleted);
+
+        if (isCompleted) {
+            dispatch(plus());
+        } else {
+            dispatch(minus());
+        }
+    };
 
     return (
         <View>
@@ -16,7 +30,7 @@ export default function TaskCard({ task }: any) {
                         : styles.container2
                 }
                 onPress={() => {
-                    setIsCompleted(!isCompleted);
+                    completeHandle();
                 }}
             >
                 {isCompleted ? <Text style={styles.textChecked}>✔</Text> : <Text>⠀⠀</Text>}

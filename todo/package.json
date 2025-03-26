@@ -13,6 +13,7 @@
     "@react-native-picker/picker": "2.9.0",
     "@react-navigation/native-stack": "^7.2.1",
     "@react-navigation/stack": "^7.1.2",
+    "@reduxjs/toolkit": "^2.6.1",
     "axios": "^1.8.2",
     "drizzle-orm": "^0.40.1",
     "expo": "~52.0.37",
@@ -22,11 +23,14 @@
     "react": "18.3.1",
     "react-hook-form": "^7.54.2",
     "react-native": "0.76.7",
-    "react-native-gesture-handler": "~2.20.2"
+    "react-native-gesture-handler": "~2.20.2",
+    "react-redux": "^9.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
     "@types/react": "~18.3.12",
+    "babel-plugin-inline-import": "^3.0.0",
+    "drizzle-kit": "^0.30.5",
     "typescript": "^5.3.3"
   },
   "private": true

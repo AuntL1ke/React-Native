@@ -1,54 +1,90 @@
-import { StatusBar } from "expo-status-bar";
-import React, { useEffect, useState } from "react";
-import { Button, FlatList, Pressable, SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
 
-import axios from "axios";
 import TaskCard from "../../components/TaskCard";
 import CreateTask from "../../components/CreateTask";
 
+import { tasks } from "../../db/schema";
+import { useDispatch } from "react-redux";
+import { plus } from "../slices/menuSlice";
+import { useEffect, useState } from "react";
 
-export type Task = {
-    todo: string;
-    completed: boolean;
-    priority: Number;
-};
+import { addTask, getTasks, useDatabase } from "../../db/tasksService";
+import { FlatList, Pressable, SafeAreaView, StyleSheet, Text } from "react-native";
 
-export default function App() {
-    const [tasks, setTasks] = useState<Task[]>([]);
+export default function Settings() {
 
-    useEffect(() => {
-        axios
-            .get("https://dummyjson.com/todos")
-            .then((response) => {
-                setTasks((prevTasks) => [...prevTasks, ...response.data.todos]); // Оновлюємо стан
-            })
-            .catch((error) => {
-                console.error("Error fetching tasks:", error);
-            });
-    }, []);
+    const {success, error} = useDatabase()
+    const [items, setItems] = useState<(typeof tasks.$inferSelect)[]|null>(null)
+    const [isModalVisible, setIsModalVisible] = useState<boolean>(false)
+    const dispatch = useDispatch()
 
-    const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
-    const addTask = (task: Task) => {
-        setTasks([...tasks, task]);
-    };
+
+    async function update() {
+        const taksList = await getTasks()
+        setItems(taksList)
+    }
+    
+    function updateUncompletedTaskCount(){
+        for(let task of items!){
+            if(task.completed !==1){
+                dispatch(plus())
+            }
+        }
+    }
+    useEffect(()=>{
+        (async () => {
+            await update()
+            updateUncompletedTaskCount()
+        })
+    },[])
+
+
+    if(error){
+        return(
+            <SafeAreaView>
+                <Text>Migration error: {error.message}</Text>
+            </SafeAreaView>
+        )
+    }
+    if(!success){
+        return(
+            <SafeAreaView>
+                <Text>Migration is in progress...</Text>
+            </SafeAreaView>
+        )
+    }
+
+    const addTaskHandler = async (task:Task) =>{
+        await addTask(task)
+        await update()
+
+        dispatch(plus())
+    }
 
     return (
         <SafeAreaView style={styles.container}>
             <Text style={styles.title}>TODO List</Text>
             <Text style={styles.subtitle}>6th March 2025</Text>
-            
-            <FlatList
-                style={styles.scrollView}
-                data={tasks}
-                renderItem={({ item }) => <TaskCard task={item} />}
-                keyExtractor={(item, index) => index.toString()}
-            />
+            {items!==null && items.length!==0 ? (
+
+                <FlatList
+                    style={styles.scrollView}
+                    data={items}
+                    renderItem={({ item }) => <TaskCard task={item} />}
+                    keyExtractor={(_, index) => index.toString()}
+                />
+            ): (
+                <Text style={styles.emptyTaskList}>There's mo tasks yet. Lets create one.</Text>
+            )}
 
             <Pressable style={styles.btn} onPress={() => setIsModalVisible(true)}>
                 <Text style={styles.btnTitle}>+</Text>
             </Pressable>
 
-            <CreateTask isVisible={isModalVisible} onClose={() => setIsModalVisible(false)} onAddTask={addTask} />
+            <CreateTask
+                 isVisible={isModalVisible}
+                 onClose={() => setIsModalVisible(false)}
+                 onAddTask={addTaskHandler}
+             />
         </SafeAreaView>
     );
 }
@@ -93,4 +129,9 @@ const styles = StyleSheet.create({
         verticalAlign: "middle",
         color: "white",
     },
+    emptyTaskList:{
+        fontSize:20,
+        textAlign:"center",
+        marginTop:50
+    }
 });
