@@ -40,6 +40,13 @@ export default function TabLayout() {
                     tabBarIcon: ({ color }) => <TabBarIcon name="gear" color={color} />,
                 }}
             />
+            <Tabs.Screen
+                name="animation"
+                options={{
+                    title:"Animations",
+                    tabBarIcon:({color})=><TabBarIcon name="circle" color={color}/>
+                }}
+            />
         </Tabs>
     );
 }
