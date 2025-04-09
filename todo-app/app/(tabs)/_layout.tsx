@@ -47,6 +47,14 @@ export default function TabLayout() {
                     tabBarIcon:({color})=><TabBarIcon name="circle" color={color}/>
                 }}
             />
+            <Tabs.Screen
+                name="card-stack"
+                options={{
+                    title: "Card Stack",
+                    tabBarIcon: ({ color }) => <TabBarIcon name="clone" color={color} />,
+                }}
+            />
+
         </Tabs>
     );
 }
