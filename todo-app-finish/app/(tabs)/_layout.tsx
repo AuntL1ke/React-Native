@@ -16,19 +16,12 @@ export default function TabLayout() {
             screenOptions={{
                 headerShown: false,
                 tabBarActiveTintColor: "#3255f0",
-                tabBarInactiveTintColor: "#999",
                 tabBarStyle: {
+                    position: "absolute",
                     height: 60,
                     backgroundColor: "white",
                     borderTopWidth: 0,
                     elevation: 0,
-                    shadowColor: "#000",
-                    shadowOffset: {
-                        width: 0,
-                        height: -2,
-                    },
-                    shadowOpacity: 0.1,
-                    shadowRadius: 3,
                 },
             }}>
             <Tabs.Screen
@@ -47,6 +40,7 @@ export default function TabLayout() {
                     tabBarIcon: ({ color }) => <TabBarIcon name="gear" color={color} />,
                 }}
             />
+
             <Tabs.Screen
                 name="animation"
                 options={{
@@ -54,11 +48,12 @@ export default function TabLayout() {
                     tabBarIcon: ({ color }) => <TabBarIcon name="circle" color={color} />,
                 }}
             />
+
             <Tabs.Screen
-                name="card-stack"
+                name="gesture"
                 options={{
-                    title: "Card Stack",
-                    tabBarIcon: ({ color }) => <TabBarIcon name="clone" color={color} />,
+                    title: "Gesture",
+                    tabBarIcon: ({ color }) => <TabBarIcon name="circle" color={color} />,
                 }}
             />
         </Tabs>

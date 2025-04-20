@@ -21,7 +21,7 @@ type ContextType = {
   startY: number;
 };
 
-function CardStack() {
+export default function CardStack() {
   const [cards, setCards] = useState(SYMBOLS);
 
   const offsetX = useSharedValue(0);
@@ -134,8 +134,3 @@ const styles = StyleSheet.create({
     fontSize: 60,
   },
 });
-
-// ✅ Оце і є export default для expo-router
-export default function CardStackScreen() {
-  return <CardStack />;
-}
